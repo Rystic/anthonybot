@@ -1,0 +1,21 @@
+import socket
+import codecs
+
+HOST = ''                 # Symbolic name meaning the local host
+PORT = 50010              # Arbitrary non-privileged port
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(1)
+conn, addr = s.accept()
+print ('Connected by', addr)
+while 1:
+    data = conn.recv(1024)
+    if not data: break
+    decoded_data = data.decode().partition(',')
+    if (decoded_data[0] == "joystick"):
+        coords = decoded_data[2].split()
+        print("x: ", str(coords[0]), " y: ", str(coords[1]))
+    elif (decoded_data[0] == "a_button"):
+        print("A was pressed!")
+print('finish')
+conn.close()
